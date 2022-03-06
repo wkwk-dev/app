@@ -58,7 +58,7 @@ function useDashboard(account, signer) {
 		setKchupBalance(_kchupBalance)
 		setTreasuryUsdc(_treasuryUsdc),
 		setTreasuryFries(_treasuryFries)
-		setFriesStaked(_friesStaked)
+		setFriesStaked(_friesStaked[0])
 		setKchupHarvestable(_kchupHarvestable)
 		setTotalKchupFarmed(_totalKchup.sub(_unharvestedKchup))
 	}

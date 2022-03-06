@@ -104,7 +104,7 @@ const Home = () => {
 						<div className="card-title">staking</div>
 						<div className="staking-info-container col evenly">
 							<Stat center title="your staked FRIES" value={format(parse(Dashboard.friesStaked, 18), 2)} />
-							<Stat center title="KCHUP harvestable" value={format(parse(Dashboard.friesStaked, 18), 2)} />
+							<Stat center title="KCHUP harvestable" value={format(parse(Dashboard.kchupHarvestable, 18), 2)} />
 						</div>
 						<div className="staking-actions col center-m center-a">
 							<Link href="/stake">
