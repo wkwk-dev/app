@@ -28,10 +28,12 @@ const Stat = ({ title, value, center }) => (
 			.title {
 				font-weight: 600;
 				font-size: 1.5em;
+				white-space: nowrap;
 			}
 
 			.stat {
 				font-size: 1.3em;
+				white-space: nowrap;
 			}
 		`}</style>
 	</>
@@ -153,7 +155,7 @@ const Home = () => {
 					min-height: min-content;
 					height: 100%;
 					width: 100%;
-					padding: 40px 20px;
+					padding: 40px 10px;
 					overflow: auto;
 				}
 
@@ -193,6 +195,7 @@ const Home = () => {
 
 				.twitter {
 					grid-area: 1 / 3 / 9 / 5;
+					overflow: hidden;
 				}
 
 				.fries {
@@ -281,6 +284,7 @@ const Home = () => {
 					.dashboard-grid {
 						font-size: 10px;
 						height: 600px;
+						gap: 10px;
 					}
 
 					.treasuryChart {
@@ -289,6 +293,18 @@ const Home = () => {
 
 					.treasury-stats {
 						margin: 0;
+					}
+
+					.staking-actions {
+						gap: 4px;
+					}
+
+					.staking-action {
+						padding: 6px 4px;
+					}
+
+					.staking {
+						gap: 8px;
 					}
 				}
 			`}</style>

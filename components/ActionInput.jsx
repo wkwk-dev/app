@@ -30,7 +30,7 @@ const ActionInput = ({actionName, token, max, action, approve, account, signer }
     }
 		
 	function updateButtonState() {
-        if (!ethers.BigNumber.isBigNumber(value) || +value.gt(max)) {
+        if (!ethers.BigNumber.isBigNumber(value) || value.isZero() || +value.gt(max)) {
             setButtonState(0)
         } else if (approve && value.gt(approval.allowance)) {
             setButtonState(1)
@@ -43,7 +43,7 @@ const ActionInput = ({actionName, token, max, action, approve, account, signer }
 		console.log(value.toString())
 		input.current.value = lastModificationPercent ? parse(value, token.decimals).toFixed(token.displayDecimals) : ethers.BigNumber.isBigNumber(value) ? parse(value, token.decimals) : value
 		updateButtonState()
-    }, [value])
+    }, [value, max])
 
 	function inputUpdate() {
         setLastModificationPercent(false)
