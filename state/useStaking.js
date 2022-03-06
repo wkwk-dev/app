@@ -57,13 +57,30 @@ function useStaking(account, signer) {
 		return tx
 	}
 
+
+	function stake(amount) {
+		const tx = StakingPool.deposit(0, amount)
+		tx.then(txResponse => txResponse.wait()).then(update)
+
+		return tx
+	}
+
+	function unstake(amount) {
+		const tx = StakingPool.withdraw(0, amount)
+		tx.then(txResponse => txResponse.wait()).then(update)
+
+		return tx
+	}
+
 	return {
 		friesBalance,
 		kchupBalance,
 		friesStaked,
 		kchupHarvestable,
 		totalKchupFarmed,
-		harvest
+		harvest,
+		stake,
+		unstake
 	}
 }
 

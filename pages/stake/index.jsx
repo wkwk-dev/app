@@ -71,14 +71,14 @@ const Stake = () => {
 								decimals: 18,
 								displayDecimals: 2,
 								address: deployments.fries
-							}} approve={deployments.stakingPool} account={account} signer={provider.getSigner()} max={parse(StakingPool.friesBalance, 18)} />
+							}} action={StakingPool.stake} approve={deployments.stakingPool} account={account} signer={provider.getSigner()} max={StakingPool.friesBalance} />
 						) : (
 							<ActionInput key="unstake" actionName="unstake" token={{
 								name: "FRIES",
 								decimals: 18,
 								displayDecimals: 2,
 								address: deployments.fries
-							}} account={account} signer={provider.getSigner()} max={parse(StakingPool.friesStaked, 18)} />
+							}} action={StakingPool.unstake} account={account} signer={provider.getSigner()} max={StakingPool.friesStaked} />
 						)}
 
 

@@ -4,13 +4,13 @@ import { ethers } from "ethers"
 import { useState } from "react" 
 const BN = n => ethers.BigNumber.from(n)
 
-function useApproval(account, signer, tokenAddress) {
+function useApproval(account, signer, spender, tokenAddress) {
     const Token = new ethers.Contract(tokenAddress, ERC20ABI, signer)
     const [ allowance, setAllowance] = useState(BN(0))
 
     function update() {
-        if (account) {
-            Token.allowance(account, tokenAddress).then(setAllowance)
+        if (account && spender) {
+            Token.allowance(account, spender).then(setAllowance)
         }
     }
 
@@ -23,8 +23,8 @@ function useApproval(account, signer, tokenAddress) {
         }
     }, [account])
 
-	function approve(address, amount=BN(2).pow(BN(256).sub(BN(1)))) {
-		const tx = Token.approve(address, amount)
+	function approve(amount=BN(2).pow(BN(256).sub(BN(1)))) {
+		const tx = Token.approve(spender, amount)
 		tx.then(txResponse => txResponse.wait()).then(update)
 
 		return tx

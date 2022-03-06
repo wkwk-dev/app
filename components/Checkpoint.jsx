@@ -3,61 +3,46 @@ import { useEffect, useState } from "react";
 import getWeb3ModalConfig from "../util/getWeb3ModalConfig.js"
 import project from "../config/project.json"
 import classNames from "classnames";
-import useBalance from "../state/useBalance.js";
-import useSign from "../state/useSign.js"
-import deployments from "../config/deployments.json"
 import { parse, format } from "../util/number.js";
 import { ethers } from "ethers";
+import useCheckpoint from "../state/useCheckpoint.js"
+
 const BN = n => ethers.BigNumber.from(n)
 
 
 const Checkpoint = ({ checkpointValid, setCheckpointValid }) => {
 	const { account, connect, provider } = useWallet();
-	const [ checkpointState, setCheckpointState ] = useState(0)
-	const balance = useBalance(account, provider, deployments.fries)
-	const { signed, sign } = useSign(account, provider?.getSigner())
+	const checkpoint = useCheckpoint(account, provider, promptConnect)
 
 	function promptConnect() {
 		connect(getWeb3ModalConfig())
 	}
 
+	function sign() {
+		provider.getSigner().signMessage("I agree to the friesDAO operating agreement").then((signedMessage) => {
+			fetch('/api/createSignature', {
+                body: JSON.stringify({
+                    address: account,
+                    signature: signedMessage
+                }),
+                method: 'POST'
+            }).then(() => {
+				checkpoint.update()
+			})
+		})
+	}
+
 	useEffect(() => {
-		let timeout
-		if (account) {
-			if (signed) {
-				if (parse(balance, 18) >= 5000) {
-					setCheckpointValid(true)
-				} else {
-					setCheckpointValid(false)
-					timeout = setTimeout(() => {
-						setCheckpointState(3)
-					}, 250)
-				}
-			} else {
-				timeout = setTimeout(() => {
-					setCheckpointState(2)
-				}, 250)
-			}
+		if (checkpoint.state == 4) {
+			setCheckpointValid(true)
 		} else {
 			setCheckpointValid(false)
-
-			if (localStorage.WEB3_CONNECT_CACHED_PROVIDER) {
-				promptConnect()
-			}
-
-			timeout = setTimeout(() => {
-				setCheckpointState(1)
-			}, 500)
 		}
-
-		return () => {
-			clearTimeout(timeout)
-		}
-	}, [account, balance, signed])
+	}, [checkpoint.state])
 
 	useEffect(() => {
-		console.log(checkpointState)
-	}, [checkpointState])
+		console.log(checkpoint.state)
+	}, [checkpoint.state])
 
 	return (
 		<>
@@ -65,11 +50,11 @@ const Checkpoint = ({ checkpointValid, setCheckpointValid }) => {
 				visible: !checkpointValid
 			})}>
 				<img className={classNames("spinner", {
-					visible: checkpointState == 0
+					visible: checkpoint.state == 0
 				})} src="/spinner.svg" />
 
 				<div className={classNames("connect-page", "page", "patterned", "col", "center-m", "center-a", {
-					visible: checkpointState == 1
+					visible: checkpoint.state == 1
 				})}>
 					<img className="logo" src={project.logo} />
 
@@ -79,7 +64,7 @@ const Checkpoint = ({ checkpointValid, setCheckpointValid }) => {
 				</div>
 
 				<div className={classNames("operating-agreement-page", "page", "patterned", "col", "center-m", "center-a", {
-					visible: checkpointState == 2
+					visible: checkpoint.state == 2
 				})}>
 					<div className="sign-title">sign the friesDAO operating agreement</div>
 					<iframe className="pdf card" src="/friesDAO_Operating_Agreement.pdf" />
@@ -87,11 +72,11 @@ const Checkpoint = ({ checkpointValid, setCheckpointValid }) => {
 				</div>
 
 				<div className={classNames("token-page", "page", "patterned", "col", "center-m", "center-a", {
-					visible: checkpointState == 3
+					visible: checkpoint.state == 3
 				})}>
 					<div className="token-title">get some FRIES tokens to become a member</div>
 					<div className="token-desc">you'll need at least 5000 FRIES for membership</div>
-					<div className="token-balance">balance: {format(parse(balance, 18))} FRIES</div>
+					<div className="token-balance">your FRIES: {format(parse(checkpoint.totalTokens, 18))} FRIES</div>
 					<a className="buy button primary" href="https://app.uniswap.org/#/swap?exactField=output&exactAmount=5000&outputCurrency=0xFA57F00D948bb6a28072f5416fCbF7836C3d62dD&chain=mainnet" target="_blank">buy on Uniswap</a>
 				</div>
 			</div>

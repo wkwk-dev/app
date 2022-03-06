@@ -1,7 +1,7 @@
 import classNames from "classnames"
 import { useState, useRef, useEffect } from "react"
 import useApproval from "../state/useApproval"
-import { parse, format, toWei, fromWei } from "../util/number.js"
+import { parse, unparse, format, toWei, fromWei } from "../util/number.js"
 import { ethers } from "ethers"
 
 const BN = n => ethers.BigNumber.from(n)
@@ -10,19 +10,19 @@ const BN = n => ethers.BigNumber.from(n)
 const ActionInput = ({actionName, token, max, action, approve, account, signer }) => {
 	const [ buttonState, setButtonState ] = useState(0)
     const [ buttonText, setButtonText ] = useState(actionName)
-	const [ value, setValue ] = useState(0)
+	const [ value, setValue ] = useState("")
 	const [ lastModificationPercent, setLastModificationPercent ] = useState(0)
 	const input = useRef(null)
-	const approval = useApproval(account, signer, token.address)
+	const approval = useApproval(account, signer, approve, token.address)
 
 	function buttonAction() {
         const stateActionMapping = {
             0: () => {},
             1: () => {
-                approval.approve(approve)
+                approval.approve()
             },
             2: () => {
-                action(toWei(BN(value), token.decimals))
+                action(value)
             }
         }
 
@@ -30,10 +30,9 @@ const ActionInput = ({actionName, token, max, action, approve, account, signer }
     }
 		
 	function updateButtonState() {
-		console.log(value)
-        if (isNaN(+value) || +value <= 0 || +value > max) {
+        if (!ethers.BigNumber.isBigNumber(value) || +value.gt(max)) {
             setButtonState(0)
-        } else if (approve && toWei(BN((+value).toFixed()), token.decimals).gt(approval.allowance)) {
+        } else if (approve && value.gt(approval.allowance)) {
             setButtonState(1)
         } else {
             setButtonState(2)
@@ -41,19 +40,23 @@ const ActionInput = ({actionName, token, max, action, approve, account, signer }
     }
 
 	useEffect(() => {
-        input.current.value = lastModificationPercent ? value.toFixed(token.displayDecimals) : (value !== 0 ? value : "")
-        updateButtonState()
+		console.log(value.toString())
+		input.current.value = lastModificationPercent ? parse(value, token.decimals).toFixed(token.displayDecimals) : ethers.BigNumber.isBigNumber(value) ? parse(value, token.decimals) : value
+		updateButtonState()
     }, [value])
 
 	function inputUpdate() {
         setLastModificationPercent(false)
-        setValue(input.current.value)
+		if (isNaN(+input.current.value) || input.current.value.includes("e") || input.current.value.slice(-1) == "." || +input.current.value <= 0) {
+			setValue(input.current.value)
+		} else {
+			setValue(BN(unparse(input.current.value, token.decimals)))
+		}
     }
 
 	function percentUpdate(percent) {
 		setLastModificationPercent(true)
-		console.log(max)
-		setValue((percent / 100) * max)
+		setValue(max.mul(BN(percent)).div(BN(100)))
 	}
 	
 	function updateButtonText() {
