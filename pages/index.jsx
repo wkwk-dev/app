@@ -1,5 +1,5 @@
 import { useWallet } from "@gimmixorg/use-wallet"
-import { ArcElement, Chart, DoughnutController, Legend, Tooltip } from 'chart.js'
+import Chart from 'chart.js/auto'
 import { ethers } from "ethers"
 import Link from "next/link"
 import { useEffect, useRef } from "react"
@@ -9,7 +9,6 @@ import project from "../config/project.json"
 import useDashboard from "../state/useDashboard"
 import { format, parse } from "../util/number.js"
 import classNames from "classnames"
-Chart.register(ArcElement, Tooltip, Legend, DoughnutController);
 
 const BN = n => ethers.BigNumber.from(n)
 
