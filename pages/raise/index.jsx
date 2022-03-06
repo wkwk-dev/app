@@ -37,44 +37,46 @@ const RaisePage = () => {
 
 	return (
 		<>
-			<div className="raise-container col">
-				<div className="raised">
-					<div className="amount">${format(Raise.raiseStats.totalRaised, 2)} raised</div>
-				</div>
-				<div className="raise-card-grid">
-					<div className="raise-card card stats col between">
-						<div className="card-title">stats</div>
-						<div className="stats-list col between">
-							<Stat title="raise duration" value={`${Raise.raiseStats.duration} days`} />
-							<Stat title="tokens distributed" value={`${format(Raise.raiseStats.raiseAllocationFries)} FRIES`} />
-							<Stat title="unique contributors" value={`${Raise.raiseStats.uniqueAddresses} addresses`} />
-							<Stat title="avg. contribution" value={`$${format(Object.values(Raise.allContributions).reduce((acc, i) => acc + i, 0) / Raise.allAddresses.length)}`} />
-						</div>
+			<div className="raise-container col center-a">
+				<div className="raise-inner col center-a">
+					<div className="raised">
+						<div className="amount">${format(Raise.raiseStats.totalRaised, 2)} raised</div>
 					</div>
-
-					<div className="raise-card card col between">
-						<div className="card-title">contributions</div>
-						<div className="contributions-list col">
-							{Raise.allAddresses.sort((a1, a2) => Raise.allContributions[a2] - Raise.allContributions[a1]).map((address) =>
-							(<>
-								<a href={`${project.explorer}/address/${address}`} target="_blank" className="contribution-container row between">
-									<div className="contributor-address">{`${address.slice(0, 5)}...${address.slice(-3)}`}</div>
-									<div className="contributor-amount">${format(Raise.allContributions[address], 2)}</div>
-								</a>
-							</>)
-							)}
+					<div className="raise-card-grid">
+						<div className="raise-card card stats col between">
+							<div className="card-title">stats</div>
+							<div className="stats-list col between">
+								<Stat title="raise duration" value={`${Raise.raiseStats.duration} days`} />
+								<Stat title="tokens distributed" value={`${format(Raise.raiseStats.raiseAllocationFries)} FRIES`} />
+								<Stat title="unique contributors" value={`${Raise.raiseStats.uniqueAddresses} addresses`} />
+								<Stat title="avg. contribution" value={`$${format(Object.values(Raise.allContributions).reduce((acc, i) => acc + i, 0) / Raise.allAddresses.length)}`} />
+							</div>
 						</div>
-					</div>
 
-					<div className="raise-card card">
-						<div className="card-title">claim</div>
-						<div className="claim-container col center-a center-m">
-							<Stat center title="pending FRIES" value={format(parse(Raise.claimable))} />
-							{/* <div className="pending-title">pending FRIES</div>
+						<div className="raise-card card col between">
+							<div className="card-title">contributions</div>
+							<div className="contributions-list col">
+								{Raise.allAddresses.sort((a1, a2) => Raise.allContributions[a2] - Raise.allContributions[a1]).map((address) =>
+								(<>
+									<a href={`${project.explorer}/address/${address}`} target="_blank" className="contribution-container row between">
+										<div className="contributor-address">{`${address.slice(0, 5)}...${address.slice(-3)}`}</div>
+										<div className="contributor-amount">${format(Raise.allContributions[address], 2)}</div>
+									</a>
+								</>)
+								)}
+							</div>
+						</div>
+
+						<div className="raise-card card">
+							<div className="card-title">claim</div>
+							<div className="claim-container col center-a center-m">
+								<Stat center title="pending FRIES" value={format(parse(Raise.claimable))} />
+								{/* <div className="pending-title">pending FRIES</div>
 							<div className="pending-tokens">{format(parse(Raise.claimable))}</div> */}
-							<button className={classNames("claim", "primary", {
-								disabled: Raise.claimable.isZero()
-							})} onClick={Raise.claim}>claim FRIES</button>
+								<button className={classNames("claim", "primary", {
+									disabled: Raise.claimable.isZero()
+								})} onClick={Raise.claim}>claim FRIES</button>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -82,13 +84,16 @@ const RaisePage = () => {
 
 			<style jsx>{`
 				.raise-container {
-					max-width: 1000px;
 					width: 100%;
-					gap: 24px;
-					margin-bottom: 40px;
 					height: 100%;
 					padding: 40px 20px;
 					overflow: auto;
+				}
+
+				.raise-inner {
+					width: 100%;
+					gap: 24px;
+					margin: auto;
 				}
 
 				.raised {
@@ -102,6 +107,7 @@ const RaisePage = () => {
 					grid-template-columns: 5fr 6fr 5fr;
 					grid-template-rows: 1fr;
 					width: 100%;
+					max-width: 1000px;
 					height: 350px;
 					gap: 20px;
 				}
@@ -169,13 +175,13 @@ const RaisePage = () => {
 				}
 
 				@media only screen and (max-width: 1150px) {
-					.raise-container {
+					.raise-inner {
 						font-size: 12px;
-						max-width: 750px;
 					}
 
 					.raise-card-grid, .raise-card {
 						height: 250px;
+						max-width: 750px;
 					}
 
 					.raise-card {
@@ -185,22 +191,19 @@ const RaisePage = () => {
 
 				@media only screen and (max-width: 850px) {
 					.raised {
-						font-size: 2.5em;
+						font-size: 2.75em;
+					}
+
+					.raise-inner {
+						height: unset;
 					}
 
 					.raise-card-grid {
 						grid-template-columns: 1fr;
 						grid-template-rows: 1fr 1fr 1fr;
-					}
-
-					.raise-container {
 						max-width: 250px;
-						gap: 12px;
-					}
-					
-					.raise-card-grid, .raise-card {
-						height: 275px;
-					}
+						height: unset;
+					}					
 				}
 			`}</style>
 		</>
