@@ -1,9 +1,9 @@
 {
     "name": "friesDAO",
-    "desc": "we're pooling funds to buy a fast food franchise or two",
+    "desc": "a decentralized social experiment where a crypto community builds and governs a fast food franchise empire via wisdom of the crowd",
     "logo": "/logo.png",
     "twitter": "@friesdao",
-    "domain": "fries.fund",
+    "domain": "app.fries.fund",
     "googleFont": "Nunito",
     "explorer": "https://etherscan.io",
     "provider": {
