@@ -2,6 +2,7 @@ import project from "../config/project.json"
 import colors from "../config/colors.json"
 import Layout from "../components/Layout.jsx"
 import Head from "next/head"
+import Error from "next/error"
 
 const Metadata = () => {
 	return (
