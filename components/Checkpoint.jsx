@@ -1,0 +1,259 @@
+import { useWallet } from "@gimmixorg/use-wallet"
+import { useEffect, useState } from "react";
+import getWeb3ModalConfig from "../util/getWeb3ModalConfig.js"
+import project from "../config/project.json"
+import classNames from "classnames";
+import useBalance from "../state/useBalance.js";
+import useSign from "../state/useSign.js"
+import deployments from "../config/deployments.json"
+import { parse, format } from "../util/number.js";
+import { ethers } from "ethers";
+const BN = n => ethers.BigNumber.from(n)
+
+
+const Checkpoint = ({ checkpointValid, setCheckpointValid }) => {
+	const { account, connect, provider } = useWallet();
+	const [ checkpointState, setCheckpointState ] = useState(0)
+	const balance = useBalance(account, provider, deployments.fries)
+	const { signed, sign } = useSign(account, provider?.getSigner())
+
+	function promptConnect() {
+		connect(getWeb3ModalConfig())
+	}
+
+	useEffect(() => {
+		let timeout
+		if (account) {
+			if (signed) {
+				if (parse(balance, 18) >= 5000) {
+					setCheckpointValid(true)
+				} else {
+					setCheckpointValid(false)
+					timeout = setTimeout(() => {
+						setCheckpointState(3)
+					}, 250)
+				}
+			} else {
+				timeout = setTimeout(() => {
+					setCheckpointState(2)
+				}, 250)
+			}
+		} else {
+			setCheckpointValid(false)
+
+			if (localStorage.WEB3_CONNECT_CACHED_PROVIDER) {
+				promptConnect()
+			}
+
+			timeout = setTimeout(() => {
+				setCheckpointState(1)
+			}, 500)
+		}
+
+		return () => {
+			clearTimeout(timeout)
+		}
+	}, [account, balance, signed])
+
+	useEffect(() => {
+		console.log(checkpointState)
+	}, [checkpointState])
+
+	return (
+		<>
+			<div className={classNames("checkpoint-container", {
+				visible: !checkpointValid
+			})}>
+				<img className={classNames("spinner", {
+					visible: checkpointState == 0
+				})} src="/spinner.svg" />
+
+				<div className={classNames("connect-page", "page", "patterned", "col", "center-m", "center-a", {
+					visible: checkpointState == 1
+				})}>
+					<img className="logo" src={project.logo} />
+
+					<div className="title">welcome to friesDAO!</div>
+
+					<button className="connect primary" onClick={promptConnect}>connect wallet</button>
+				</div>
+
+				<div className={classNames("operating-agreement-page", "page", "patterned", "col", "center-m", "center-a", {
+					visible: checkpointState == 2
+				})}>
+					<div className="sign-title">sign the friesDAO operating agreement</div>
+					<iframe className="pdf card" src="/friesDAO_Operating_Agreement.pdf" />
+					<button className="sign primary" onClick={sign}>accept and sign</button>
+				</div>
+
+				<div className={classNames("token-page", "page", "patterned", "col", "center-m", "center-a", {
+					visible: checkpointState == 3
+				})}>
+					<div className="token-title">get some FRIES tokens to become a member</div>
+					<div className="token-desc">you'll need at least 5000 FRIES for membership</div>
+					<div className="token-balance">balance: {format(parse(balance, 18))} FRIES</div>
+					<a className="buy button primary" href="https://app.uniswap.org/#/swap?exactField=output&exactAmount=5000&outputCurrency=0xFA57F00D948bb6a28072f5416fCbF7836C3d62dD&chain=mainnet" target="_blank">buy on Uniswap</a>
+				</div>
+			</div>
+
+			<style jsx>{`
+				.checkpoint-container {
+					opacity: 0;
+					visibility: hidden;
+					transition: 0.25s opacity, 0.25s visibility;
+					z-index: 999;
+					display: none;
+				}
+				
+				.spinner {
+					position: absolute;
+					top: 50%;
+					left: 50%;
+					transform: translate(-50%, -50%);
+					height: 300px;
+					opacity: 0;
+					visibility: hidden;
+					transition: 0.25s opacity, 0.25s visibility;
+				}
+
+				.page {
+					position: absolute;
+					height: 100vh;
+					padding: 20px;
+					width: 100%;
+					transition: 0.25s opacity;
+					background-color: var(--bg);
+					opacity: 0;
+					visibility: hidden;
+					transition: 0.25s opacity, 0.25s visibility;
+				}
+
+				.connect-page {
+					gap: 40px;
+				}
+
+				.operating-agreement-page {
+					gap: 20px;
+				}
+				
+				.visible {
+					opacity: 1;
+    				visibility: unset;
+    				transition: visibility 0s 0s, opacity 0.25s 0s;
+				}
+
+				.checkpoint-container.visible {
+					display: block;
+				}
+
+				.logo {
+					max-width: 400px;
+					width: 100%;
+				}
+
+				.title {
+					font-size: 4em;
+					font-weight: 700;
+					text-align: center;
+				}
+
+				.sign-title, .token-title {
+					font-size: 3em;
+					font-weight: 700;
+					text-align: center;
+				}
+
+				.token-page {
+					gap: 20px;
+				}
+
+				.token-balance {
+					font-size: 2em;
+					text-align: center;
+					font-weight: 600;
+				}
+
+				.token-desc {
+					font-size: 1.5em;
+					text-align: center;
+				}
+
+				.connect, .sign, .buy {
+					font-size: 2em;
+					padding: 8px 20px;
+					text-align: center;
+				}
+
+				.pdf {
+					max-width: 700px;
+					width: 95%;
+					height: 500px;
+				}
+
+				@media only screen and (max-height: 700px) {
+					.logo {
+						max-width: unset;
+						width: unset;
+						height: 300px;
+					}
+
+					.connect-page {
+						gap: 16px;
+					}
+
+					.operating-agreement-page {
+						font-size: 12px;
+					}
+
+					.token-page {
+						font-size: 12px;
+						gap: 12px;
+					}
+
+					.pdf {
+						height: 300px;
+					}
+				}
+
+				@media only screen and (max-height: 500px) {
+					.logo {
+						max-width: unset;
+						width: unset;
+						height: 250px;
+					}
+
+					.connect-page {
+						gap: 8px;
+						font-size: 12px;
+					}
+
+					.operating-agreement-page {
+						gap: 8px;
+					}
+
+					.pdf {
+						height: 200px;
+					}
+				}
+
+				@media only screen and (max-width: 700px) {
+					.connect-page {
+						font-size: 12px;
+						gap: 24px;
+					}
+
+					.operating-agreement-page {
+						font-size: 12px;
+					}
+
+					.token-page {
+						font-size: 12px;
+						gap: 12px;
+					}
+				}
+			`}</style>
+		</>
+	)
+}
+
+export default Checkpoint

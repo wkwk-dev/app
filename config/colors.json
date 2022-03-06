@@ -1,0 +1,21 @@
+{
+    "raw": {
+        "purple": "#7A83EA",
+        "orange": "#E36911",
+        "white": "#FDFDFD",
+        "light-orange": "#fff5f0",
+        "black": "#16191E",
+        "gray": "#afafaf",
+		"light-gray": "#ddd",
+		"usdc": "#2775CA"
+    },
+
+    "theme": {
+        "light": {
+            "bg": "white",
+            "bg-alt": "light-orange",
+            "accent": "orange",
+            "text": "black"
+        }
+    }
+}

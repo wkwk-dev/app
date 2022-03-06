@@ -1,0 +1,13 @@
+{
+    "name": "friesDAO",
+    "desc": "we're pooling funds to buy a fast food franchise or two",
+    "logo": "/logo.png",
+    "twitter": "@friesdao",
+    "domain": "fries.fund",
+    "googleFont": "Nunito",
+    "explorer": "https://etherscan.io",
+    "provider": {
+        "url": "https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161",
+        "id": "9aa3d95b3bc440fa88ea12eaa4456161"
+    }
+}
