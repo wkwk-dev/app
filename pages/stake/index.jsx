@@ -49,7 +49,7 @@ const Stake = () => {
 						<div className="card-title">stats</div>
 						<Stat title="FRIES staked" value={format(parse(StakingPool.friesStaked, 18), 2)} />
 						<Stat title="FRIES balance" value={format(parse(StakingPool.friesBalance, 18), 2)} />
-						<Stat title="all FRIES staked" value={format(parse(StakingPool.friesStaked, 18), 2)} />
+						<Stat title="all FRIES staked" value={format(parse(StakingPool.allFriesStaked, 18), 2)} />
 						<Stat title="all KCHUP farmed" value={format(parse(StakingPool.totalKchupFarmed, 18), 2)} />
 					</div>
 

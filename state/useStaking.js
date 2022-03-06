@@ -14,6 +14,7 @@ function useStaking(account, signer) {
 	const [ friesBalance, setFriesBalance ] = useState(BN(0))
 	const [ kchupBalance, setKchupBalance ] = useState(BN(0))
 	const [ friesStaked, setFriesStaked ] = useState(BN(0))
+	const [ allFriesStaked, setAllFriesStaked ] = useState(BN(0))
 	const [ kchupHarvestable, setKchupHarvestable ] = useState(BN(0))
 	const [ totalKchupFarmed, setTotalKchupFarmed ] = useState(BN(0))
 	const [ poolStart, setPoolStart ] = useState(0)
@@ -34,20 +35,23 @@ function useStaking(account, signer) {
 			_friesStaked,
 			_kchupHarvestable,
 			_unharvestedKchup,
-			_totalKchup
+			_totalKchup,
+			_allFriesStaked
 		] = await Promise.all([
 			FRIES.balanceOf(account),
 			KCHUP.balanceOf(account),
 			StakingPool.userInfo(0, account),
 			StakingPool.pendingKCHUP(0, account),
 			KCHUP.balanceOf(deployments.stakingPool),
-			KCHUP.totalSupply()
+			KCHUP.totalSupply(),
+			FRIES.balanceOf(deployments.stakingPool)
 		])
 		setFriesBalance(_friesBalance)
 		setKchupBalance(_kchupBalance)
 		setFriesStaked(_friesStaked[0])
 		setKchupHarvestable(_kchupHarvestable)
-		setTotalKchupFarmed(_totalKchup.sub(_unharvestedKchup))
+		setTotalKchupFarmed(_totalKchup.sub(_unharvestedKchup)),
+		setAllFriesStaked(_allFriesStaked)
 	}
 	
 	function harvest() {
@@ -78,6 +82,7 @@ function useStaking(account, signer) {
 		friesStaked,
 		kchupHarvestable,
 		totalKchupFarmed,
+		allFriesStaked,
 		harvest,
 		stake,
 		unstake
