@@ -218,7 +218,7 @@ const Sidebar = ({ style }) => {
 				}
 
 				.link.disabled > .link-icon, .link.disabled > .link-text {
-					color: var(--gray);	
+					color: var(--disabled);	
 				}
 
 				.link.disabled {
