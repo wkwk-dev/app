@@ -39,13 +39,14 @@ const Stat = ({ title, value, center }) => (
 	</>
 )
 
-const Home = () => {
+const Home = ({ theme }) => {
 	const { account, provider } = useWallet()
 	const Dashboard = useDashboard(account, provider.getSigner())
 	const treasuryChartRef = useRef(null)
 
 	useEffect(() => {
 		Chart.defaults.font.family = project.googleFont;
+		Chart.defaults.color = colors.raw[colors.elements[theme].text]
 		const chartRef = treasuryChartRef.current.getContext("2d")
 
 		const chart = new Chart(chartRef, {
@@ -128,6 +129,7 @@ const Home = () => {
 								height: '100%',
 								width: "100%",
 								chrome: "noheader, nofooter",
+								theme: theme
 							}}
 						/>
 					</div>

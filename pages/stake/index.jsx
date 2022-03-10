@@ -138,7 +138,7 @@ const Stake = () => {
 					left: 50%;
 					transform: translateX(-50%);
 					background-color: var(--accent);
-					color: var(--bg);
+					color: var(--white);
 					border: 1px solid var(--accent);
 					padding: 0 16px;
 					border-radius: 0 0 var(--border-radius) var(--border-radius);

@@ -7,15 +7,28 @@
         "black": "#16191E",
         "gray": "#afafaf",
 		"light-gray": "#ddd",
-		"usdc": "#2775CA"
+		"dark-tan": "#52443c",
+		"usdc": "#2775CA",
+		"dark-orange": "#171311",
+		"dark-gray": "#505050"
     },
 
-    "theme": {
-        "light": {
+    "elements": {
+		"light": {
             "bg": "white",
             "bg-alt": "light-orange",
             "accent": "orange",
-            "text": "black"
+            "text": "black",
+			"pattern": "light-gray",
+			"disabled": "gray"
+        },
+        "dark": {
+            "bg": "dark-orange",
+            "bg-alt": "light-orange",
+            "accent": "orange",
+            "text": "white",
+			"pattern": "dark-tan",
+			"disabled": "dark-gray"
         }
     }
 }

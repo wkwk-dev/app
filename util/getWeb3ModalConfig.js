@@ -4,9 +4,10 @@ import Fortmatic from "fortmatic";
 import WalletLink from "walletlink";
 import project from "../config/project.json"
 
-const getWeb3ModalConfig = () => ({
+const getWeb3ModalConfig = (theme) => ({
 	network: "mainnet",
 	cacheProvider: true,
+	theme: theme,
 	providerOptions: {
 		walletconnect: {
 			package: WalletConnectProvider,
@@ -37,7 +38,7 @@ const getWeb3ModalConfig = () => ({
 				infuraId: project.provider.id,
 				chainId: 1,
 				appLogoUrl: "https://fries.fund/friesdao-square.png",
-				darkMode: false
+				darkMode: theme == "dark"
 			}
 		}
 	}

@@ -10,12 +10,12 @@ import useCheckpoint from "../state/useCheckpoint.js"
 const BN = n => ethers.BigNumber.from(n)
 
 
-const Checkpoint = ({ checkpointValid, setCheckpointValid }) => {
+const Checkpoint = ({ checkpointValid, setCheckpointValid, theme }) => {
 	const { account, connect, provider } = useWallet();
 	const checkpoint = useCheckpoint(account, provider, promptConnect)
 
 	function promptConnect() {
-		connect(getWeb3ModalConfig())
+		connect(getWeb3ModalConfig(theme))
 	}
 
 	function sign() {

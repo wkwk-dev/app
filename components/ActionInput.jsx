@@ -115,9 +115,12 @@ const ActionInput = ({actionName, token, max, action, approve, account, signer }
 					flex: 1;
                     width: 100%;
 					outline: none;
+					background: inherit;
+					color: var(--text);
 				}
 
 				.action {
+					border-width: 3px;
 					border-top-left-radius: 0;
 					border-bottom-left-radius: 0;
 					border-left-width: 0;

@@ -40,7 +40,7 @@ const WalletManager = () => {
 	)
 }
 
-const Header = ({ style }) => {
+const Header = ({ style, theme, setTheme }) => {
 	return (
 		<>
 			<div className="header row center-m" style={style}>
@@ -54,7 +54,7 @@ const Header = ({ style }) => {
 					<div className="right row center-a">
 						<a className="community" href="https://discord.gg/friesdao" target="_blank">community</a>
 						<WalletManager />
-						{/* <button className="theme tertiary"><i className="fas fa-sun"></i></button> */}
+						<button className="theme tertiary" onClick={() => {setTheme(theme == "light" ? "dark" : "light")}}><i className="fas fa-sun"></i></button>
 					</div>
 				</div>
 			</div>
@@ -255,20 +255,20 @@ const Sidebar = ({ style }) => {
 	)
 }
 
-const Layout = ({ children }) => {
+const Layout = ({ children, theme, setTheme }) => {
 	const { account } = useWallet();
 	const [ checkpointValid, setCheckpointValid ] = useState(false)
 
 	return (
 		<>
-			<Checkpoint checkpointValid={checkpointValid} setCheckpointValid={setCheckpointValid} />
+			<Checkpoint checkpointValid={checkpointValid} setCheckpointValid={setCheckpointValid} theme={theme} />
 
 
 			{checkpointValid && account ? (
 				<div className={classNames("app", "patterned", {
 					visible: checkpointValid
 				})}>
-					<Header style={{ gridArea: "1 / 1 / 2 / 3" }} />
+					<Header style={{ gridArea: "1 / 1 / 2 / 3" }} theme={theme} setTheme={setTheme} />
 					<Sidebar style={{ gridArea: "2 / 1 / 3 / 2" }} />
 					<div className="main row center-a center-m">
 						{children}
