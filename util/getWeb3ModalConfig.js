@@ -15,12 +15,12 @@ const getWeb3ModalConfig = (theme) => ({
 				infuraId: project.provider.id
 			}
 		},
-		portis: {
-			package: Portis,
-			options: {
-				id: "2f71ab54-dc11-41eb-86e3-c44d74767e44"
-			}
-		},
+		// portis: {
+		// 	package: Portis,
+		// 	options: {
+		// 		id: "2f71ab54-dc11-41eb-86e3-c44d74767e44"
+		// 	}
+		// },
 		fortmatic: {
 			package: Fortmatic,
 			options: {

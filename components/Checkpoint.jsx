@@ -66,7 +66,7 @@ const Checkpoint = ({ checkpointValid, setCheckpointValid, theme }) => {
 				<div className={classNames("operating-agreement-page", "page", "patterned", "col", "center-m", "center-a", {
 					visible: checkpoint.state == 2
 				})}>
-					<div className="sign-title">sign the friesDAO operating agreement</div>
+					<div className="sign-title">sign the friesDAO <a className="underline" href="https://fries.fund/friesDAO_Operating_Agreement.pdf" target="_blank">operating agreement</a></div>
 					<iframe className="pdf card" src="https://docs.google.com/viewerng/viewer?url=https://fries.fund/friesDAO_Operating_Agreement.pdf&embedded=true" frameborder="0" height="100%" width="100%" />
 					<button className="sign primary" onClick={sign}>accept and sign</button>
 				</div>
