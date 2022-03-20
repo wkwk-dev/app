@@ -1,5 +1,5 @@
 import { useWallet } from "@gimmixorg/use-wallet"
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import getWeb3ModalConfig from "../util/getWeb3ModalConfig.js"
 import project from "../config/project.json"
 import classNames from "classnames";
@@ -11,11 +11,36 @@ const BN = n => ethers.BigNumber.from(n)
 
 
 const Checkpoint = ({ checkpointValid, setCheckpointValid, theme }) => {
-	const { account, connect, provider } = useWallet();
-	const checkpoint = useCheckpoint(account, provider, promptConnect)
+	const { account, connect, network, provider, web3Modal } = useWallet();
+	const checkpoint = useCheckpoint(account, provider, network, promptConnect)
+	const [ pdfLoaded, setPdfLoaded ] = useState(false)
+	const pdf = useRef(null)
+	pdf.current?.addEventListener("load", () => setPdfLoaded(true))
+	useEffect(() => {
+		const interval = setInterval(() => {
+			if (pdfLoaded) {
+				clearInterval(interval)
+				return
+			}
+			pdf.current.src = "https://docs.google.com/viewerng/viewer?url=https://fries.fund/friesDAO_Operating_Agreement.pdf&embedded=true"
+		}, 2000)
+
+		return () => {
+			clearInterval(interval)
+		}
+	}, [pdfLoaded])
 
 	function promptConnect() {
 		connect(getWeb3ModalConfig(theme))
+	}
+
+	function switchNetwork() {
+		if (web3Modal.cachedProvider === "injected") {
+			ethereum.request({
+                method: "wallet_switchEthereumChain",
+                params: [{ chainId: "0x" + project.chainId }]
+            })
+		}
 	}
 
 	function sign() {
@@ -33,7 +58,7 @@ const Checkpoint = ({ checkpointValid, setCheckpointValid, theme }) => {
 	}
 
 	useEffect(() => {
-		if (checkpoint.state == 4) {
+		if (checkpoint.state == 5) {
 			setCheckpointValid(true)
 		} else {
 			setCheckpointValid(false)
@@ -54,25 +79,30 @@ const Checkpoint = ({ checkpointValid, setCheckpointValid, theme }) => {
 				})} src="/spinner.svg" />
 
 				<div className={classNames("connect-page", "page", "patterned", "col", "center-m", "center-a", {
-					visible: checkpoint.state == 1
+					visible: checkpoint.state == 1 || checkpoint.state == 2
 				})}>
 					<img className="logo" src={project.logo} />
 
 					<div className="title">welcome to friesDAO!</div>
 
-					<button className="connect primary" onClick={promptConnect}>connect wallet</button>
+					<button className="connect primary" onClick={checkpoint.state == 1 ? promptConnect : switchNetwork}>{checkpoint.state == 1 ? "connect wallet" : "switch network"}</button>
 				</div>
 
 				<div className={classNames("operating-agreement-page", "page", "patterned", "col", "center-m", "center-a", {
-					visible: checkpoint.state == 2
+					visible: checkpoint.state == 3
 				})}>
 					<div className="sign-title">sign the friesDAO <a className="underline" href="https://fries.fund/friesDAO_Operating_Agreement.pdf" target="_blank">operating agreement</a></div>
-					<iframe className="pdf card" src="https://docs.google.com/viewerng/viewer?url=https://fries.fund/friesDAO_Operating_Agreement.pdf&embedded=true" frameborder="0" height="100%" width="100%" />
+					<div className="pdf card">
+						<img className={classNames("spinner", {
+							visible: !pdfLoaded
+						})} src="./spinner.svg" />
+						<iframe ref={pdf} src="https://docs.google.com/viewerng/viewer?url=https://fries.fund/friesDAO_Operating_Agreement.pdf&embedded=true" frameBorder="0" height="100%" width="100%" />
+					</div>
 					<button className="sign primary" onClick={sign}>accept and sign</button>
 				</div>
 
 				<div className={classNames("token-page", "page", "patterned", "col", "center-m", "center-a", {
-					visible: checkpoint.state == 3
+					visible: checkpoint.state == 4
 				})}>
 					<div className="token-title">get some FRIES tokens to become a member</div>
 					<div className="token-desc">you'll need at least 5000 FRIES for membership</div>

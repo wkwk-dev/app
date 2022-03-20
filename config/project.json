@@ -6,6 +6,7 @@
     "domain": "app.fries.fund",
     "googleFont": "Nunito",
     "explorer": "https://etherscan.io",
+	"chainId": 1,
     "provider": {
         "url": "https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161",
         "id": "9aa3d95b3bc440fa88ea12eaa4456161"
