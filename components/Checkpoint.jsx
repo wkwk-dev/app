@@ -65,10 +65,6 @@ const Checkpoint = ({ checkpointValid, setCheckpointValid, theme }) => {
 		}
 	}, [checkpoint.state])
 
-	useEffect(() => {
-		console.log(checkpoint.state)
-	}, [checkpoint.state])
-
 	return (
 		<>
 			<div className={classNames("checkpoint-container", {

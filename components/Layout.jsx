@@ -150,7 +150,7 @@ const Sidebar = ({ style }) => {
 					</Link>
 
 					<Link href="/nft">
-						<a className={classNames("link", "row", "center-a", "disabled", {
+						<a className={classNames("link", "row", "center-a", {
 							active: pathname == "/nft"
 						})}>
 							<i className="link-icon fas fa-pizza-slice"></i>

@@ -11,6 +11,15 @@ function unparse(num, decimals = 18) {
 	}
 }
 
+/*
+const number = num.toString()
+    if (number.includes(".")) {
+        const parts = number.split(".")
+        return new BN(parts[0] + parts[1].slice(0, decimals) + "0".repeat(Math.max(decimals - parts[1].length, 0)))
+    }
+    return new BN(number + "0".repeat(decimals))
+*/
+
 function parse(num, decimals = 18) {
     const padded = num.toString().padStart(decimals + 1, "0")
     const parsed = `${padded.slice(0, -decimals)}.${padded.slice(-decimals)}`.replace(/0+$/g, "")
@@ -27,7 +36,7 @@ function format(num, decimals = 2) {
     }
 
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-    return parts.join(".")
+    return parts[1] ? parts.join(".") : parts[0]
 }
 
 function toWei(num, dec) {

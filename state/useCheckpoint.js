@@ -20,7 +20,6 @@ function useCheckpoint(account, provider, network, promptConnect) {
 
 	async function getSigned(account) {
 		if (!signedCache.includes(account)) {
-			console.log("query sign")
 			const result = await axios.get(`/api/checkSignature?address=${account}`).then(result => result.data)
 			if (result) signedCache.push(account)
 			return result

@@ -1,20 +1,19 @@
-import keccak256 from "keccak256"
-import MerkleTree from "merkletreejs"
 import { ethers } from "ethers"
+const keccak256  = require("keccak256")
+const { MerkleTree } = require("merkletreejs")
 
-function makeLeaf(address, amount, vesting, decimals) {
+function makeLeaf(address, amounts) {
     const normalizedAddress = ethers.utils.getAddress(address)
-    const value = ethers.utils.parseUnits(amount.toString(), decimals).toString()
     const keccak = ethers.utils.solidityKeccak256(
-        ["address", "uint256", "bool"], 
-        [normalizedAddress, value, vesting]
-    ).slice(2)    
+        ["address", "uint256[3]"], 
+        [normalizedAddress, amounts]
+    ).slice(2)
     return Buffer.from(keccak, "hex")
 }
 
 function makeTree(whitelist) {
-    const leaves =  whitelist.map(([address, amount, vesting]) => 
-        makeLeaf(address, amount, vesting, 18))
+    const leaves =  whitelist.map(([address, amounts]) => 
+        makeLeaf(address, amounts))
     return new MerkleTree(
         leaves,
         keccak256,
