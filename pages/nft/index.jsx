@@ -74,7 +74,7 @@ const NFTPage = () => {
 
 					<div className="nft-select card nft-card col center-a">
 						{	 
-							Object.keys(NFT.nftsOwned).map(nft => (
+							Object.values(NFT.nftsOwned).map(nft => (
 								<>
 									<div className="nft-preview col center-a rounded" onClick={() => setSelectedNFT(nft.id)}>
 										<img src={nft.image} className="nft-thumbnail"/>
