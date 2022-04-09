@@ -22,7 +22,7 @@ const Checkpoint = ({ checkpointValid, setCheckpointValid, theme }) => {
 				clearInterval(interval)
 				return
 			}
-			pdf.current.src = "https://docs.google.com/viewerng/viewer?url=https://fries.fund/friesDAO_Operating_Agreement.pdf&embedded=true"
+			pdf.current.src = "https://docs.google.com/viewerng/viewer?url=https://fries.fund/friesDAO_Operating_Agreement.pdf&embedded=false"
 		}, 2000)
 
 		return () => {
@@ -61,7 +61,7 @@ const Checkpoint = ({ checkpointValid, setCheckpointValid, theme }) => {
 		if (checkpoint.state == 5) {
 			setCheckpointValid(true)
 		} else {
-			setCheckpointValid(true)
+			setCheckpointValid(false)
 		}
 	}, [checkpoint.state])
 
@@ -81,7 +81,7 @@ const Checkpoint = ({ checkpointValid, setCheckpointValid, theme }) => {
 
 					<div className="title">welcome to friesDAO!</div>
 
-					<button className="connect primary" onClick={checkpoint.state == 1 ? promptConnect : switchNetwork}>{checkpoint.state == 1 ? "connect wallet" : "switch network"}</button>
+					<button className="connect primary" onClick={checkpoint.state == 2 ? promptConnect : switchNetwork}>{checkpoint.state == 2 ? "connect wallet" : "switch network"}</button>
 				</div>
 
 				<div className={classNames("operating-agreement-page", "page", "patterned", "col", "center-m", "center-a", {
@@ -92,7 +92,7 @@ const Checkpoint = ({ checkpointValid, setCheckpointValid, theme }) => {
 						<img className={classNames("spinner", {
 							visible: !pdfLoaded
 						})} src="./spinner.svg" />
-						<iframe ref={pdf} src="https://docs.google.com/viewerng/viewer?url=https://fries.fund/friesDAO_Operating_Agreement.pdf&embedded=true" frameBorder="0" height="100%" width="100%" />
+						<iframe ref={pdf} src="https://docs.google.com/viewerng/viewer?url=https://fries.fund/friesDAO_Operating_Agreement.pdf&embedded=false" frameBorder="0" height="100%" width="100%" />
 					</div>
 					<button className="sign primary" onClick={sign}>accept and sign</button>
 				</div>
