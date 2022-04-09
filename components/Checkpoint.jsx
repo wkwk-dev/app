@@ -61,7 +61,7 @@ const Checkpoint = ({ checkpointValid, setCheckpointValid, theme }) => {
 		if (checkpoint.state == 5) {
 			setCheckpointValid(true)
 		} else {
-			setCheckpointValid(false)
+			setCheckpointValid(true)
 		}
 	}, [checkpoint.state])
 
