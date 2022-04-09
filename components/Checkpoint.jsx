@@ -81,7 +81,7 @@ const Checkpoint = ({ checkpointValid, setCheckpointValid, theme }) => {
 
 					<div className="title">welcome to friesDAO!</div>
 
-					<button className="connect primary" onClick={checkpoint.state == 2 ? promptConnect : switchNetwork}>{checkpoint.state == 2 ? "connect wallet" : "switch network"}</button>
+					<button className="connect primary" onClick={checkpoint.state == 1 ? promptConnect : switchNetwork}>{checkpoint.state == 1 ? "connect wallet" : "switch network"}</button>
 				</div>
 
 				<div className={classNames("operating-agreement-page", "page", "patterned", "col", "center-m", "center-a", {
