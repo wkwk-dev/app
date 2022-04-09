@@ -59,9 +59,9 @@ const Checkpoint = ({ checkpointValid, setCheckpointValid, theme }) => {
 
 	useEffect(() => {
 		if (checkpoint.state == 5) {
-			setCheckpointValid(false)
+			setCheckpointValid(true)
 		} else {
-			setCheckpointValid(false)
+			setCheckpointValid(true)
 		}
 	}, [checkpoint.state])
 
