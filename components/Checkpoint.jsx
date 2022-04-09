@@ -15,7 +15,7 @@ const Checkpoint = ({ checkpointValid, setCheckpointValid, theme }) => {
 	const checkpoint = useCheckpoint(account, provider, network, promptConnect)
 	const [ pdfLoaded, setPdfLoaded ] = useState(false)
 	const pdf = useRef(null)
-	pdf.current?.addEventListener("load", () => setPdfLoaded(false))
+	pdf.current?.addEventListener("load", () => setPdfLoaded(true))
 	useEffect(() => {
 		const interval = setInterval(() => {
 			if (pdfLoaded) {
